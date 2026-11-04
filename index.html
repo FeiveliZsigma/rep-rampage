@@ -92,6 +92,20 @@
             <p class="muted tiny" id="rest-message">Rest restores hero health without spending rewards.</p>
           </div>
         </div>
+        <div class="loot-overlay" id="loot-overlay" hidden>
+          <div class="loot-reveal-card">
+            <div class="loot-eyebrow">ENEMY DEFEATED · TREASURE FOUND</div>
+            <div class="loot-glow-icon" id="loot-icon">✦</div>
+            <div class="loot-rarity" id="loot-rarity">RARE</div>
+            <h2 id="loot-name">Forest Relic</h2>
+            <p id="loot-description">A keepsake from the guardian.</p>
+            <p class="loot-capacity" id="loot-capacity">Inventory: 0 / 12 slots</p>
+            <div class="loot-actions">
+              <button class="primary-btn" id="keep-loot-button">KEEP ITEM</button>
+              <button class="secondary-btn" id="sell-loot-button">SELL FOR 10 ◈</button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="screen" id="training-screen">
@@ -114,6 +128,12 @@
         <article class="character-card"><div class="avatar">⚔</div><span class="tag">ELDORIA ADVENTURER</span><h2>Forest Recruit</h2><p class="muted">A new legend in the making.</p><div class="xp-line"><span>LEVEL <b id="profile-level">1</b></span><span id="profile-xp">0 / 100 XP</span></div><div class="progress-track"><span id="profile-progress"></span></div></article>
         <div class="section-heading"><div><div class="eyebrow">EQUIPMENT</div><h2>Armoury</h2></div></div>
         <div class="equipment-grid"><div>🪖<span>Helmet</span><b>Empty</b></div><div>🛡<span>Chestplate</span><b>Wanderer's Tunic</b></div><div>⚔<span>Main hand</span><b>Training Sword</b></div><div>🥾<span>Boots</span><b>Empty</b></div></div>
+        <div class="section-heading"><div><div class="eyebrow">CARRYING CAPACITY</div><h2>Inventory</h2></div><span class="muted small" id="inventory-count">0 / 12 SLOTS</span></div>
+        <p class="muted tiny">Your pack has 12 slots. Sell unwanted loot to make room for new discoveries.</p>
+        <div class="inventory-grid" id="inventory-grid"><p class="muted">Your inventory is empty. Defeat an enemy to find loot.</p></div>
+        <div class="section-heading"><div><div class="eyebrow">TRADE POST</div><h2>Merchant's Shop</h2></div></div>
+        <p class="muted tiny">Spend earned coins on supplies and equipment. Shop purchases use inventory space.</p>
+        <div class="shop-grid" id="shop-grid"></div>
       </section>
 
       <section class="screen" id="progress-screen">
@@ -134,6 +154,6 @@
       <button class="nav-item" data-screen="progress"><span>▥</span>Progress</button>
     </nav>
   </div>
-  <script src="./app.js?v=8" defer></script>
+  <script src="./app.js?v=9" defer></script>
 </body>
 </html>
