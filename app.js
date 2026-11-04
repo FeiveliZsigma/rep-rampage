@@ -175,7 +175,6 @@ document.getElementById("log-workout").addEventListener("click", () => {
 
   const today = localDateKey();
   const variation = document.getElementById("variation-select").value;
-  let battleMessage = "";
   save.sessions.unshift({
     reps, variation, date: new Date().toLocaleDateString(), xp: 20, createdAt: new Date().toISOString()
   });
@@ -193,7 +192,7 @@ document.getElementById("log-workout").addEventListener("click", () => {
   } else {
     message.textContent = "Session logged. +20 XP and +5 coins. Your training rewards are ready; battles happen separately.";
   }
-  setText("battle-log", battleMessage);
+  setText("battle-log", "Training recorded. Your hero is ready when you are — head to Battle and choose an attack.");
 
   const priorDay = new Date(today + "T12:00:00");
   priorDay.setDate(priorDay.getDate() - 1);
