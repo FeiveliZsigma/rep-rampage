@@ -5,7 +5,7 @@ const ENEMIES = [
   { name: "Mossbound Guardian", symbol: "♟", maxHp: 145, level: 3 },
   { name: "Hollow Knight", symbol: "⚔", maxHp: 175, level: 4 }
 ];
-const defaultSave = {
+const REGIONS = [{"name":"Forgotten Forest","symbol":"🌲","description":"Ancient paths, watchful roots, and the first guardians.","lore":"The old forest has begun to whisper again.","boss":"Forest Sentinel"},{"name":"Hollow Crypt","symbol":"🏚️","description":"A buried kingdom where the lanterns never stay lit.","lore":"Sealed doors tremble beneath the earth.","boss":"Crypt Warden"},{"name":"Ashen Kingdom","symbol":"🔥","description":"A fallen capital buried beneath ash and embers.","lore":"The ruined throne still radiates a strange heat.","boss":"Ashen Regent"},{"name":"Frozen Dominion","symbol":"❄️","description":"A silent frontier of ice, storms, and forgotten oaths.","lore":"Something ancient sleeps beneath the glacier.","boss":"Frostbound Colossus"},{"name":"Shadow Realm","symbol":"🌑","description":"The final frontier where the corruption began.","lore":"The source of the darkness waits beyond the veil.","boss":"The Umbral Sovereign"}];\nconst defaultSave = {
   xp: 0, coins: 0, quests: 0, sessions: [], streak: 0, wins: 0,
   heroHp: 100, enemyIndex: 0, enemyHp: 100, lastQuestDate: "",
   lastTrainingDate: "", activeDays: []
@@ -44,6 +44,8 @@ function levelInfo() {
   return { level, into: save.xp % 100 };
 }
 function currentEnemy() { return ENEMIES[save.enemyIndex % ENEMIES.length]; }
+function currentRegionIndex() { return Math.min(REGIONS.length - 1, Math.floor(save.wins / 2)); }
+function unlockedRegionCount() { return Math.min(REGIONS.length, Math.floor(save.wins / 2) + 1); }
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
@@ -88,6 +90,22 @@ function showScreen(name) {
 document.querySelectorAll("[data-screen]").forEach(button => button.addEventListener("click", () => showScreen(button.dataset.screen)));
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => showScreen(button.dataset.go)));
 
+function renderWorld() {
+  const list = document.getElementById("region-list");
+  if (!list) return;
+  const unlocked = unlockedRegionCount();
+  const active = currentRegionIndex();
+  list.innerHTML = REGIONS.map((region, index) => {
+    const isOpen = index < unlocked;
+    const isCurrent = index === active;
+    const requirement = index === 0 ? "Starting region" : (index * 2) + " guardian victories required";
+    const status = isCurrent ? "CURRENT REGION" : isOpen ? "DISCOVERED" : "LOCKED";
+    return '<article class="region-card ' + (isOpen ? "region-open" : "region-locked") + (isCurrent ? " region-current" : "") + '">' +
+      '<div class="region-art region-art-' + index + '"><span>' + region.symbol + '</span><b>' + String(index + 1).padStart(2, "0") + '</b></div>' +
+      '<div class="region-copy"><div class="region-status">' + status + '</div><h2>' + region.name + '</h2><p>' + region.description + '</p>' +
+      '<div class="region-boss">GUARDIAN: <strong>' + region.boss + '</strong></div><div class="region-requirement">' + (isOpen ? region.lore : "🔒 " + requirement) + '</div></div></article>';
+  }).join("");
+}
 function renderQuest() {
   const button = document.getElementById("quest-button");
   if (!button) return;
