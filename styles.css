@@ -84,3 +84,28 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .battle-player-zone #rest-message{margin:4px 0 0;text-align:center;font-size:8px}
 @media(max-height:740px){.battle-arena{gap:9px}.battle-enemy-art{height:105px}.camera-placeholder{min-height:115px}.battle-player-zone{padding:9px 12px}.battle-controls button{min-height:42px}}
 @media(min-width:600px){.battle-arena{max-width:560px;margin:0 auto}.camera-placeholder{min-height:230px}}
+
+
+/* Loot reveal, inventory capacity and merchant */
+.loot-overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:22px;background:#050509d9;backdrop-filter:blur(9px)}
+.loot-overlay[hidden]{display:none}
+.loot-reveal-card{width:min(100%,390px);text-align:center;padding:25px 20px 21px;border:1px solid #d8aa62aa;border-radius:16px;background:radial-gradient(ellipse at 50% 0%,#4a352b,#1c1a20 58%,#111116);box-shadow:0 0 24px #d8aa6233,0 0 75px #b27b3c22;animation:loot-pop .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes loot-pop{from{opacity:0;transform:scale(.78) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.loot-eyebrow{font-size:9px;letter-spacing:1.8px;color:var(--gold);font-weight:800}
+.loot-glow-icon{font-size:66px;line-height:1.4;margin:12px auto 0;filter:drop-shadow(0 0 10px #f2c77c) drop-shadow(0 0 24px #d8aa62);animation:loot-glow 1.8s ease-in-out infinite alternate}
+@keyframes loot-glow{from{transform:scale(.96);filter:drop-shadow(0 0 8px #f2c77c)}to{transform:scale(1.07);filter:drop-shadow(0 0 18px #f2c77c) drop-shadow(0 0 32px #d8aa62)}}
+.loot-rarity{font-size:9px;font-weight:900;letter-spacing:2px;color:var(--gold2);margin:4px 0 8px}
+.loot-reveal-card h2{font-size:24px;margin-bottom:7px}
+.loot-reveal-card p{font-size:11px;color:var(--muted);margin-bottom:9px}
+.loot-capacity{color:var(--gold)!important;font-weight:700}
+.loot-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.loot-actions button{font-size:9px;padding:13px 8px}
+.inventory-grid,.shop-grid{display:grid;gap:9px}
+.inventory-item,.shop-item{display:flex;align-items:center;gap:11px;padding:11px;background:linear-gradient(145deg,#222127,#17171d);border:1px solid var(--line);border-radius:9px;min-width:0}
+.inventory-item-icon{width:42px;height:42px;flex:none;display:grid;place-items:center;background:#d8aa6217;border:1px solid #d8aa6233;border-radius:8px;font-size:23px}
+.inventory-item-copy{display:grid;gap:5px;min-width:0;flex:1}
+.inventory-item-copy strong{font:600 12px Cinzel,Georgia,serif;color:var(--text)}
+.inventory-item-copy span{font-size:8px;line-height:1.4;color:var(--gold);letter-spacing:.5px}
+.sell-item-btn,.buy-item-btn{flex:none;padding:9px 10px;border:1px solid #d8aa6255;border-radius:5px;background:#d8aa6215;color:var(--gold);font-size:8px;font-weight:900;letter-spacing:.6px;cursor:pointer}
+.buy-item-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:360px){.loot-actions{grid-template-columns:1fr}.inventory-item{gap:7px}.sell-item-btn,.buy-item-btn{padding:8px 7px}}
