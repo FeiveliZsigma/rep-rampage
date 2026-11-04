@@ -49,9 +49,12 @@
       <section class="screen" id="battle-screen">
         <div class="eyebrow">ENCOUNTER</div><h1>THE FOREST<br><span>SENTINEL</span></h1>
         <p class="muted intro">A guardian watches over the old forest gate. Build your character through balanced training. Your progress carries across sessions.</p>
-        <article class="enemy-card"><div class="enemy-symbol">♜</div><div><span class="tag">REGION BOSS</span><h2>Forest Sentinel</h2><p class="muted small">A first challenge awaits.</p></div><div class="enemy-level">LVL 1</div></article>
-        <div class="progress-label"><span>ENCOUNTER PROGRESS</span><strong id="battle-progress-label">0 / 100 XP</strong></div><div class="progress-track"><span id="battle-progress"></span></div>
-        <div class="panel"><h3>How battles work</h3><p class="muted">Complete appropriate training sessions to earn XP and advance your adventure. You never need to finish an encounter in one workout. Rest and recovery are part of the journey.</p><button class="primary-btn" data-go="training">GO TO TRAINING →</button></div>
+        <article class="enemy-card"><div class="enemy-symbol">♜</div><div><span class="tag">REGION BOSS</span><h2>Forest Sentinel</h2><p class="muted small">A first challenge awaits.</p></div><div class="enemy-level">LVL <span id="enemy-level">1</span></div></article>
+        <div class="battle-bars">
+          <div class="progress-label"><span>ENEMY VITALITY</span><strong id="enemy-hp-label">100 / 100 HP</strong></div><div class="progress-track enemy-track"><span id="enemy-hp-bar"></span></div>
+          <div class="progress-label"><span>YOUR HERO</span><strong id="hero-hp-label">100 / 100 HP</strong></div><div class="progress-track hero-track"><span id="hero-hp-bar"></span></div>
+        </div>
+        <div class="panel battle-log-panel"><h3>Battle log</h3><p class="muted" id="battle-log" aria-live="polite">The Forest Sentinel blocks the path. Complete a training session to take your turn.</p><div class="battle-rewards"><span>✦ XP <b id="battle-wins">0</b> victories</span><span>◈ <b id="battle-coins">0</b> coins</span></div><button class="primary-btn" data-go="training">ENTER TRAINING →</button></div>
       </section>
 
       <section class="screen" id="training-screen">
@@ -59,7 +62,8 @@
         <p class="muted intro">Choose a comfortable session. Quality, control, and recovery come before chasing numbers.</p>
         <article class="panel training-panel"><div class="panel-heading"><div><span class="tag">STARTER SESSION</span><h2>Push-up Practice</h2></div><span class="difficulty">BEGINNER</span></div>
           <p class="muted">Use a variation you can perform with steady form. Stop if you feel pain, dizziness, or unusual discomfort.</p>
-          <label for="rep-input">Reps completed</label><div class="rep-entry"><button class="step-btn" id="minus-reps" aria-label="Decrease reps">−</button><input id="rep-input" type="number" min="0" max="100" value="5" inputmode="numeric"><button class="step-btn" id="plus-reps" aria-label="Increase reps">+</button></div>
+          <label for="variation-select">Training variation</label><select id="variation-select"><option value="Standard">Standard push-up</option><option value="Incline">Incline push-up</option><option value="Knee">Knee push-up</option><option value="Wide">Wide push-up</option><option value="Diamond">Diamond push-up</option><option value="Pike">Pike push-up</option></select>
+          <label for="rep-input">Total reps completed</label><div class="rep-entry"><button class="step-btn" id="minus-reps" aria-label="Decrease reps">−</button><input id="rep-input" type="number" min="0" max="100" value="5" inputmode="numeric"><button class="step-btn" id="plus-reps" aria-label="Increase reps">+</button></div>
           <p class="muted tiny">This is a manual log for the prototype. Camera-based rep detection is not connected yet.</p>
           <button class="primary-btn full" id="log-workout">LOG SESSION</button>
           <div class="notice" id="training-message" role="status" aria-live="polite"></div>
