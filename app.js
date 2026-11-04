@@ -90,6 +90,22 @@ function showScreen(name) {
 document.querySelectorAll("[data-screen]").forEach(button => button.addEventListener("click", () => showScreen(button.dataset.screen)));
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => showScreen(button.dataset.go)));
 
+function renderAchievements() {
+  const list = document.getElementById("achievement-list");
+  if (!list) return;
+  const level = levelInfo().level;
+  const checks = [
+    { name: "First Footsteps", detail: "Log your first training session", icon: "👣", done: save.sessions.length >= 1 },
+    { name: "Getting Consistent", detail: "Log five training sessions", icon: "📜", done: save.sessions.length >= 5 },
+    { name: "Guardian Slayer", detail: "Win your first guardian encounter", icon: "⚔️", done: save.wins >= 1 },
+    { name: "Realm Walker", detail: "Discover three regions", icon: "🗺️", done: unlockedRegionCount() >= 3 },
+    { name: "Rising Legend", detail: "Reach level five", icon: "👑", done: level >= 5 },
+    { name: "Eldoria Explorer", detail: "Discover all five regions", icon: "🌌", done: unlockedRegionCount() >= 5 }
+  ];
+  list.innerHTML = checks.map(item =>
+    '<article class="achievement-card ' + (item.done ? "achievement-earned" : "achievement-locked") + '"><span class="achievement-icon">' + item.icon + '</span><div><h3>' + item.name + '</h3><p>' + item.detail + '</p></div><strong>' + (item.done ? "EARNED ✓" : "LOCKED") + '</strong></article>'
+  ).join("");
+}
 function renderWorld() {
   const list = document.getElementById("region-list");
   if (!list) return;
