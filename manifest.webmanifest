@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "REP RAMPAGE",
+  "short_name": "REP RAMPAGE",
+  "description": "Train, complete quests, and explore Eldoria.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101014",
+  "theme_color": "#101014",
+  "icons": [
+    { "src": "./assets/rep-rampage-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
