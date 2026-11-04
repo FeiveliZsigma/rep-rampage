@@ -49,3 +49,38 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .battle-controls .primary-btn,.battle-controls .secondary-btn{margin:0;min-height:46px}
 .text-btn{background:none;border:0;color:var(--gold);font-size:10px;font-weight:800;letter-spacing:1px;padding:12px;cursor:pointer}
 @media(max-width:380px){.battle-controls{grid-template-columns:1fr}}
+
+
+/* Immersive battle arena layout */
+.battle-screen{min-height:calc(100svh - 112px);padding-bottom:12px}
+.battle-arena{min-height:calc(100svh - 150px);display:flex;flex-direction:column;gap:14px}
+.battle-enemy-zone{position:relative;text-align:center;padding:4px 12px 0}
+.battle-enemy-zone .eyebrow{margin-bottom:6px}
+.battle-enemy-art{height:clamp(105px,19vh,170px);display:grid;place-items:center;position:relative;overflow:hidden;border:1px solid #765b3c66;border-radius:14px;background:radial-gradient(ellipse at 50% 70%,#5a4031 0,#29232a 42%,#121217 78%)}
+.battle-enemy-art:before{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(transparent,#0c0c11)}
+.battle-enemy-art .enemy-symbol{width:auto;height:auto;background:none;font-size:clamp(64px,15vw,104px);color:#e0c28d;text-shadow:0 8px 26px #000;z-index:1}
+.battle-enemy-heading{display:flex;justify-content:space-between;align-items:center;text-align:left;padding:8px 2px 0}
+.battle-enemy-heading h1{font-size:clamp(21px,6vw,29px);margin:3px 0 0}
+.battle-enemy-heading .enemy-level{padding-right:5px}
+.battle-enemy-health{padding:0 3px}
+.battle-health-label{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:9px;letter-spacing:1.2px;margin-bottom:7px}
+.battle-health-label strong{color:var(--text);font-size:11px;letter-spacing:0}
+.battle-enemy-health .progress-track,.battle-player-health .progress-track{height:10px}
+.camera-placeholder{flex:1;min-height:150px;border:1px solid #303039;border-radius:13px;background:#030305;display:grid;place-items:center;overflow:hidden}
+.camera-placeholder-content{display:grid;justify-items:center;gap:9px;color:#77747b}
+.camera-outline{font-size:30px;color:#55515c}
+.camera-placeholder-content strong{font:600 12px Cinzel,serif;letter-spacing:1.5px;color:#aaa5ad}
+.camera-placeholder-content>span:last-child{font-size:8px;letter-spacing:1.6px}
+.battle-player-zone{padding:12px 14px 10px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,#201f25,#15151a)}
+.battle-player-health{margin-bottom:13px}
+.battle-controls{margin:0;grid-template-columns:1fr 1fr}
+.battle-controls button{min-height:48px;padding:10px 7px;font-size:9px}
+.battle-power-status{margin:7px 0 3px;font-size:9px}
+.battle-bottom-row{display:flex;align-items:center;gap:10px;min-height:34px}
+.battle-log-inline{flex:1;margin:0;font-size:10px;line-height:1.4}
+.rest-compact{padding:9px 12px;font-size:9px}
+.battle-player-zone .battle-rewards{margin:7px 0 0;font-size:9px}
+.battle-player-zone .text-btn{padding:9px 4px 2px}
+.battle-player-zone #rest-message{margin:4px 0 0;text-align:center;font-size:8px}
+@media(max-height:740px){.battle-arena{gap:9px}.battle-enemy-art{height:105px}.camera-placeholder{min-height:115px}.battle-player-zone{padding:9px 12px}.battle-controls button{min-height:42px}}
+@media(min-width:600px){.battle-arena{max-width:560px;margin:0 auto}.camera-placeholder{min-height:230px}}
