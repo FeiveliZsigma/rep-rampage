@@ -7,7 +7,7 @@ const ENEMIES = [
 ];
 const REGIONS = [{"name":"Forgotten Forest","symbol":"🌲","description":"Ancient paths, watchful roots, and the first guardians.","lore":"The old forest has begun to whisper again.","boss":"Forest Sentinel"},{"name":"Hollow Crypt","symbol":"🏚️","description":"A buried kingdom where the lanterns never stay lit.","lore":"Sealed doors tremble beneath the earth.","boss":"Crypt Warden"},{"name":"Ashen Kingdom","symbol":"🔥","description":"A fallen capital buried beneath ash and embers.","lore":"The ruined throne still radiates a strange heat.","boss":"Ashen Regent"},{"name":"Frozen Dominion","symbol":"❄️","description":"A silent frontier of ice, storms, and forgotten oaths.","lore":"Something ancient sleeps beneath the glacier.","boss":"Frostbound Colossus"},{"name":"Shadow Realm","symbol":"🌑","description":"The final frontier where the corruption began.","lore":"The source of the darkness waits beyond the veil.","boss":"The Umbral Sovereign"}];\nconst defaultSave = {
   xp: 0, coins: 0, quests: 0, sessions: [], streak: 0, wins: 0,
-  heroHp: 100, enemyIndex: 0, enemyHp: 100, lastQuestDate: "",
+  heroHp: 100, enemyIndex: 0, enemyHp: 100, specialCooldown: 0, lastQuestDate: "",
   lastTrainingDate: "", activeDays: []
 };
 let save = loadSave();
@@ -23,6 +23,7 @@ function loadSave() {
     const savedHeroHp = Number(merged.heroHp);
     merged.enemyHp = Math.max(0, Math.min(enemy.maxHp, Number.isFinite(savedEnemyHp) ? savedEnemyHp : enemy.maxHp));
     merged.heroHp = Math.max(0, Math.min(100, Number.isFinite(savedHeroHp) ? savedHeroHp : 100));
+    merged.specialCooldown = Math.max(0, Math.min(2, Number(merged.specialCooldown) || 0));
     return merged;
   } catch {
     return { ...defaultSave };
@@ -79,6 +80,14 @@ function renderStats() {
   setBar("hero-hp-bar", save.heroHp, 100);
   setText("battle-wins", save.wins);
   setText("battle-coins", save.coins);
+  const attackButton = document.getElementById("attack-button");
+  const powerButton = document.getElementById("power-button");
+  if (attackButton) attackButton.disabled = save.heroHp <= 0;
+  if (powerButton) {
+    powerButton.disabled = save.heroHp <= 0 || save.specialCooldown > 0;
+    powerButton.textContent = save.specialCooldown > 0 ? "✦ RECHARGING (" + save.specialCooldown + ")" : "✦ POWER STRIKE";
+  }
+  setText("power-status", save.heroHp <= 0 ? "Your hero needs to rest before fighting again." : save.specialCooldown > 0 ? "Power Strike recharges after " + save.specialCooldown + " more enemy turn(s)." : "Power Strike is ready. It deals 30 damage.");
   const region = REGIONS[currentRegionIndex()];
   setText("home-region-name", region.name);
   setText("home-region-description", region.description);
@@ -166,32 +175,12 @@ document.getElementById("log-workout").addEventListener("click", () => {
 
   const today = localDateKey();
   const variation = document.getElementById("variation-select").value;
-  const enemy = currentEnemy();
-  const damage = 25;
-  const counterDamage = 8;
-  let battleMessage = "You landed a hit on " + enemy.name + " for " + damage + " damage.";
+  let battleMessage = "";
   save.sessions.unshift({
     reps, variation, date: new Date().toLocaleDateString(), xp: 20, createdAt: new Date().toISOString()
   });
   save.xp += 20;
   save.coins += 5;
-  save.enemyHp = Math.max(0, save.enemyHp - damage);
-
-  if (save.enemyHp === 0) {
-    save.wins += 1;
-    save.xp += 30;
-    save.coins += 15;
-    battleMessage = enemy.name + " defeated! Victory rewards: +30 XP and +15 coins.";
-    save.enemyIndex = (save.enemyIndex + 1) % ENEMIES.length;
-    save.enemyHp = currentEnemy().maxHp;
-  } else {
-    save.heroHp = Math.max(0, save.heroHp - counterDamage);
-    if (save.heroHp === 0) {
-      battleMessage += " Your hero needs recovery. Your next training day restores hero vitality.";
-    } else {
-      battleMessage += " The enemy countered for " + counterDamage + " hero vitality.";
-    }
-  }
 
   if (!save.activeDays.includes(today)) save.activeDays.push(today);
   save.lastTrainingDate = today;
@@ -200,9 +189,9 @@ document.getElementById("log-workout").addEventListener("click", () => {
     save.quests += 1;
     save.xp += 50;
     save.coins += 10;
-    message.textContent = "Session logged. Daily quest complete: +20 XP, +50 quest XP and +15 coins.";
+    message.textContent = "Session logged. Daily quest complete: +70 XP total and +15 coins. Visit Battle to fight monsters.";
   } else {
-    message.textContent = "Session logged. +20 XP and +5 coins. Nice work.";
+    message.textContent = "Session logged. +20 XP and +5 coins. Your training rewards are ready; battles happen separately.";
   }
   setText("battle-log", battleMessage);
 
@@ -211,6 +200,41 @@ document.getElementById("log-workout").addEventListener("click", () => {
   persist();
   repInput.value = 5;
 });
+
+function resolveEnemyTurn() {
+  const damage = 8;
+  save.heroHp = Math.max(0, save.heroHp - damage);
+  if (save.specialCooldown > 0) save.specialCooldown -= 1;
+  return damage;
+}
+function playerAttack(powerful = false) {
+  if (save.heroHp <= 0) {
+    setText("battle-log", "Your hero is exhausted. Rest to restore vitality before the next fight.");
+    return;
+  }
+  const enemy = currentEnemy();
+  const damage = powerful ? 30 : 15;
+  if (powerful) save.specialCooldown = 2;
+  save.enemyHp = Math.max(0, save.enemyHp - damage);
+  if (save.enemyHp === 0) {
+    save.wins += 1;
+    save.xp += 30;
+    save.coins += 15;
+    save.enemyIndex = (save.enemyIndex + 1) % ENEMIES.length;
+    save.enemyHp = currentEnemy().maxHp;
+    save.specialCooldown = 0;
+    setText("battle-log", enemy.name + " defeated! You earned 30 XP and 15 coins. A new challenger approaches: " + currentEnemy().name + ".");
+  } else {
+    const counterDamage = resolveEnemyTurn();
+    const counterText = save.heroHp > 0
+      ? enemy.name + " counterattacks for " + counterDamage + " vitality."
+      : enemy.name + " lands a final counter. Your hero needs to rest.";
+    setText("battle-log", (powerful ? "Power Strike" : "Quick Attack") + " hits " + enemy.name + " for " + damage + " damage. " + counterText);
+  }
+  persist();
+}
+document.getElementById("attack-button").addEventListener("click", () => playerAttack(false));
+document.getElementById("power-button").addEventListener("click", () => playerAttack(true));
 
 document.getElementById("rest-button").addEventListener("click", () => {
   save.heroHp = 100;
