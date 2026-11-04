@@ -76,6 +76,7 @@ function setBar(id, value, max) {
 function renderStats() {
   const { level, into } = levelInfo();
   setText("coin-count", save.coins);
+  setText("shop-coin-count", save.coins);
   setText("level-count", level);
   setText("xp-count", save.xp);
   setText("streak-count", save.activeDays.length + (save.activeDays.length === 1 ? " day" : " days"));
