@@ -69,6 +69,8 @@ function renderStats() {
 
   const enemy = currentEnemy();
   setText("enemy-level", enemy.level);
+  setText("enemy-name", enemy.name);
+  setText("enemy-symbol", enemy.symbol);
   setText("enemy-hp-label", save.enemyHp + " / " + enemy.maxHp + " HP");
   setText("hero-hp-label", save.heroHp + " / 100 HP");
   setBar("enemy-hp-bar", save.enemyHp, enemy.maxHp);
