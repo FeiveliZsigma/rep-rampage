@@ -1,25 +1,43 @@
 # REP RAMPAGE
 
-A camera-assisted push-up fitness RPG built with React Native and Expo.
+A dark-fantasy fitness RPG designed as an installable Progressive Web App (PWA). Open it in Safari and add it to your iPhone Home Screen.
 
 ## Build status
 - [x] Game direction and core design established
 - [x] GitHub repository created
-- [x] First mobile home-screen prototype added
-- [ ] Create the local Expo SDK 58 project
-- [ ] Connect the local project to this repository
-- [ ] Add navigation and saved player progress
-- [ ] Build and test reliable push-up rep detection
+- [x] First mobile UI prototype
+- [x] PWA app shell, manifest, icon, and offline shell caching
+- [x] Basic navigation, local progress, training log, and quest interaction
+- [x] GitHub Pages deployment workflow
+- [ ] Enable GitHub Pages with GitHub Actions in repository settings
+- [ ] Test the deployed app on iPhone Safari
+- [ ] Improve app icon assets for iOS
+- [ ] Add camera-based pose tracking and reliable rep detection
+- [ ] Add account sync and privacy-conscious leaderboards
 
 ## Tech direction
-- App: React Native + TypeScript + Expo
-- Camera: on-device body-landmark processing; a development build will be needed for the camera integration
-- Data: local-first player progress, then account sync and leaderboards
+- App: HTML, CSS, and JavaScript PWA
+- Hosting: GitHub Pages
+- Install: Safari → Share → Add to Home Screen
+- Data: local browser storage for this prototype
 - Source control: this GitHub repository
 
-## Getting started
-Create the Expo project locally with the official template, then copy the starter screen from starter/RepRampageHome.tsx into the project.
-Official guide: https://docs.expo.dev/get-started/create-a-project/
+## Deploying
+The workflow at `.github/workflows/deploy.yml` deploys the repository to GitHub Pages whenever changes are pushed to `main`.
+
+In the repository, open **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**. Then open the **Actions** tab and check the deployment workflow. Once it succeeds, the site will be available at:
+
+https://feivelizsigma.github.io/rep-rampage/
+
+## Current prototype
+The current version includes:
+- Home, Battle, Training, Hero, and Progress screens
+- A manual training log (camera-based rep detection is not connected yet)
+- Local XP, coins, levels, quest completion, and training history
+- Responsive dark-fantasy styling
+- Basic offline caching after the first successful visit
 
 ## Safety and privacy
-Workouts will have sensible limits. Recovery days preserve consistency, and boss progress can span multiple sessions. Camera processing should stay on-device by default; workout video should not be uploaded.
+Training is intended to be steady and age-appropriate, not a race to accumulate reps. Stop if you feel pain, dizziness, or unusual discomfort. Rest and recovery are part of progress. Boss progress can span multiple sessions.
+
+Camera features are not active in this prototype. When introduced, camera access will require permission and workout video should not be uploaded by default.
