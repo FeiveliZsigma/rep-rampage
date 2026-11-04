@@ -6,10 +6,24 @@ const ENEMIES = [
   { name: "Hollow Knight", symbol: "⚔", maxHp: 175, level: 4 }
 ];
 const REGIONS = [{"name":"Forgotten Forest","symbol":"🌲","description":"Ancient paths, watchful roots, and the first guardians.","lore":"The old forest has begun to whisper again.","boss":"Forest Sentinel"},{"name":"Hollow Crypt","symbol":"🏚️","description":"A buried kingdom where the lanterns never stay lit.","lore":"Sealed doors tremble beneath the earth.","boss":"Crypt Warden"},{"name":"Ashen Kingdom","symbol":"🔥","description":"A fallen capital buried beneath ash and embers.","lore":"The ruined throne still radiates a strange heat.","boss":"Ashen Regent"},{"name":"Frozen Dominion","symbol":"❄️","description":"A silent frontier of ice, storms, and forgotten oaths.","lore":"Something ancient sleeps beneath the glacier.","boss":"Frostbound Colossus"},{"name":"Shadow Realm","symbol":"🌑","description":"The final frontier where the corruption began.","lore":"The source of the darkness waits beyond the veil.","boss":"The Umbral Sovereign"}];
+const INVENTORY_LIMIT = 12;
+const LOOT_TABLE = [
+  { name: "Forest Sigil", icon: "🌿", rarity: "COMMON", description: "A leaf-shaped token from the old forest.", sell: 8, price: 24 },
+  { name: "Sentinel Shard", icon: "💠", rarity: "RARE", description: "A fragment that hums with guardian energy.", sell: 16, price: 48 },
+  { name: "Warden's Coin", icon: "🪙", rarity: "COMMON", description: "An old coin stamped with a forgotten crest.", sell: 10, price: 30 },
+  { name: "Ember Core", icon: "🔥", rarity: "EPIC", description: "A warm crystal recovered from a fallen foe.", sell: 28, price: 84 },
+  { name: "Moonlit Charm", icon: "🌙", rarity: "RARE", description: "A charm that catches the light strangely.", sell: 18, price: 54 },
+  { name: "Ancient Relic", icon: "🏺", rarity: "LEGENDARY", description: "A rare relic from Eldoria's lost age.", sell: 40, price: 120 }
+];
+const SHOP_STOCK = [
+  { id: "healing-tonic", name: "Healing Tonic", icon: "🧪", rarity: "COMMON", description: "Restores your hero's in-game vitality.", price: 20, sell: 8 },
+  { id: "iron-charm", name: "Iron Charm", icon: "🛡️", rarity: "RARE", description: "A sturdy charm for your collection.", price: 45, sell: 18 },
+  { id: "ember-token", name: "Ember Token", icon: "🔥", rarity: "EPIC", description: "A bright token forged in the Ashen Kingdom.", price: 75, sell: 30 }
+];
 const defaultSave = {
   xp: 0, coins: 0, quests: 0, sessions: [], streak: 0, wins: 0,
   heroHp: 100, enemyIndex: 0, enemyHp: 100, specialCooldown: 0, lastQuestDate: "",
-  lastTrainingDate: "", activeDays: []
+  lastTrainingDate: "", activeDays: [], inventory: [], pendingLoot: null
 };
 let save = loadSave();
 
@@ -19,6 +33,9 @@ function loadSave() {
     const merged = { ...defaultSave, ...stored };
     if (!Array.isArray(merged.sessions)) merged.sessions = [];
     if (!Array.isArray(merged.activeDays)) merged.activeDays = [];
+    if (!Array.isArray(merged.inventory)) merged.inventory = [];
+    merged.inventory = merged.inventory.slice(0, INVENTORY_LIMIT);
+    if (merged.pendingLoot && typeof merged.pendingLoot !== "object") merged.pendingLoot = null;
     const enemy = ENEMIES[merged.enemyIndex % ENEMIES.length];
     const savedEnemyHp = Number(merged.enemyHp);
     const savedHeroHp = Number(merged.heroHp);
@@ -98,6 +115,46 @@ function renderStats() {
   renderAchievements();
   renderHistory();
   renderQuest();
+  renderInventory();
+  renderLootReveal();
+}
+function renderInventory() {
+  const grid = document.getElementById("inventory-grid");
+  const count = document.getElementById("inventory-count");
+  const shop = document.getElementById("shop-grid");
+  if (count) count.textContent = save.inventory.length + " / " + INVENTORY_LIMIT + " SLOTS";
+  if (grid) {
+    grid.innerHTML = save.inventory.length
+      ? save.inventory.map((item, index) =>
+          '<article class="inventory-item"><div class="inventory-item-icon">' + item.icon + '</div><div class="inventory-item-copy"><strong>' + item.name + '</strong><span>' + item.rarity + ' · SELL ' + item.sell + ' ◈</span></div><button class="sell-item-btn" data-sell-index="' + index + '">SELL</button></article>'
+        ).join("")
+      : '<p class="muted">Your inventory is empty. Defeat an enemy to find loot.</p>';
+  }
+  if (shop) {
+    shop.innerHTML = SHOP_STOCK.map(item =>
+      '<article class="shop-item"><div class="inventory-item-icon">' + item.icon + '</div><div class="inventory-item-copy"><strong>' + item.name + '</strong><span>' + item.rarity + ' · ' + item.description + '</span></div><button class="buy-item-btn" data-buy-id="' + item.id + '"' + (save.coins < item.price || save.inventory.length >= INVENTORY_LIMIT ? " disabled" : "") + '>BUY ' + item.price + ' ◈</button></article>'
+    ).join("");
+  }
+}
+function renderLootReveal() {
+  const overlay = document.getElementById("loot-overlay");
+  if (!overlay || !save.pendingLoot) {
+    if (overlay) overlay.hidden = true;
+    return;
+  }
+  const item = save.pendingLoot;
+  overlay.hidden = false;
+  setText("loot-icon", item.icon);
+  setText("loot-rarity", item.rarity + " DROP");
+  setText("loot-name", item.name);
+  setText("loot-description", item.description);
+  setText("loot-capacity", "Inventory: " + save.inventory.length + " / " + INVENTORY_LIMIT + " slots");
+  const keep = document.getElementById("keep-loot-button");
+  if (keep) {
+    keep.disabled = save.inventory.length >= INVENTORY_LIMIT;
+    keep.textContent = save.inventory.length >= INVENTORY_LIMIT ? "INVENTORY FULL" : "KEEP ITEM";
+  }
+  setText("sell-loot-button", "SELL FOR " + item.sell + " ◈");
 }
 function showScreen(name) {
   document.querySelectorAll(".screen").forEach(screen => screen.classList.toggle("active", screen.id === name + "-screen"));
@@ -223,7 +280,9 @@ function playerAttack(powerful = false) {
     save.enemyIndex = (save.enemyIndex + 1) % ENEMIES.length;
     save.enemyHp = currentEnemy().maxHp;
     save.specialCooldown = 0;
-    setText("battle-log", enemy.name + " defeated! You earned 30 XP and 15 coins. A new challenger approaches: " + currentEnemy().name + ".");
+    const drop = LOOT_TABLE[Math.floor(Math.random() * LOOT_TABLE.length)];
+    save.pendingLoot = { ...drop };
+    setText("battle-log", enemy.name + " defeated! You earned 30 XP and 15 coins. A treasure drop appeared.");
   } else {
     const counterDamage = resolveEnemyTurn();
     const counterText = save.heroHp > 0
@@ -243,6 +302,45 @@ document.getElementById("rest-button").addEventListener("click", () => {
   setText("rest-message", "Hero vitality restored to 100. No XP or coins were spent.");
 });
 
+function closeLootReveal() {
+  save.pendingLoot = null;
+  persist();
+}
+document.getElementById("keep-loot-button").addEventListener("click", () => {
+  if (!save.pendingLoot || save.inventory.length >= INVENTORY_LIMIT) return;
+  save.inventory.push({ ...save.pendingLoot, id: "loot-" + Date.now() });
+  const itemName = save.pendingLoot.name;
+  save.pendingLoot = null;
+  persist();
+  setText("battle-log", itemName + " added to your inventory.");
+});
+document.getElementById("sell-loot-button").addEventListener("click", () => {
+  if (!save.pendingLoot) return;
+  const item = save.pendingLoot;
+  save.coins += item.sell;
+  save.pendingLoot = null;
+  persist();
+  setText("battle-log", item.name + " sold for " + item.sell + " coins.");
+});
+document.getElementById("inventory-grid").addEventListener("click", event => {
+  const button = event.target.closest("[data-sell-index]");
+  if (!button) return;
+  const index = Number(button.dataset.sellIndex);
+  const item = save.inventory[index];
+  if (!item) return;
+  save.inventory.splice(index, 1);
+  save.coins += item.sell;
+  persist();
+});
+document.getElementById("shop-grid").addEventListener("click", event => {
+  const button = event.target.closest("[data-buy-id]");
+  if (!button) return;
+  const item = SHOP_STOCK.find(entry => entry.id === button.dataset.buyId);
+  if (!item || save.coins < item.price || save.inventory.length >= INVENTORY_LIMIT) return;
+  save.coins -= item.price;
+  save.inventory.push({ ...item, id: item.id + "-" + Date.now() });
+  persist();
+});
 document.getElementById("quest-button").addEventListener("click", () => {
   const message = document.getElementById("training-message");
   message.textContent = "Complete a training session to finish today's quest. No extra grind required.";
