@@ -42,3 +42,10 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .achievement-earned{border-color:#b68d5355}
 .achievement-earned>strong{color:var(--gold)}
 .achievement-locked{opacity:.65}
+
+
+/* Turn-based combat controls */
+.battle-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.battle-controls .primary-btn,.battle-controls .secondary-btn{margin:0;min-height:46px}
+.text-btn{background:none;border:0;color:var(--gold);font-size:10px;font-weight:800;letter-spacing:1px;padding:12px;cursor:pointer}
+@media(max-width:380px){.battle-controls{grid-template-columns:1fr}}
