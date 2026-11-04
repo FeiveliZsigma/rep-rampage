@@ -128,11 +128,25 @@
         <article class="character-card"><div class="avatar">⚔</div><span class="tag">ELDORIA ADVENTURER</span><h2>Forest Recruit</h2><p class="muted">A new legend in the making.</p><div class="xp-line"><span>LEVEL <b id="profile-level">1</b></span><span id="profile-xp">0 / 100 XP</span></div><div class="progress-track"><span id="profile-progress"></span></div></article>
         <div class="section-heading"><div><div class="eyebrow">EQUIPMENT</div><h2>Armoury</h2></div></div>
         <div class="equipment-grid"><div>🪖<span>Helmet</span><b>Empty</b></div><div>🛡<span>Chestplate</span><b>Wanderer's Tunic</b></div><div>⚔<span>Main hand</span><b>Training Sword</b></div><div>🥾<span>Boots</span><b>Empty</b></div></div>
-        <div class="section-heading"><div><div class="eyebrow">CARRYING CAPACITY</div><h2>Inventory</h2></div><span class="muted small" id="inventory-count">0 / 12 SLOTS</span></div>
-        <p class="muted tiny">Your pack has 12 slots. Sell unwanted loot to make room for new discoveries.</p>
+        <div class="section-heading"><div><div class="eyebrow">YOUR GEAR & SUPPLIES</div><h2>Adventurer's Pack</h2></div></div>
+        <div class="hero-destination-grid">
+          <button class="hero-destination-card" data-go="inventory"><span>🎒</span><strong>INVENTORY</strong><small>View, manage and sell items</small></button>
+          <button class="hero-destination-card" data-go="shop"><span>🏪</span><strong>MERCHANT'S SHOP</strong><small>Buy items with your coins</small></button>
+        </div>
+      </section>
+
+      <section class="screen" id="inventory-screen">
+        <button class="text-btn back-link" data-go="character">← BACK TO HERO</button>
+        <div class="eyebrow">CARRYING CAPACITY</div><h1>YOUR<br><span>INVENTORY.</span></h1>
+        <div class="inventory-capacity-panel"><div><strong id="inventory-count">0 / 12 SLOTS</strong><span>PACK CAPACITY</span></div><p>12 slots available. Sell unwanted items to make room for new discoveries.</p></div>
         <div class="inventory-grid" id="inventory-grid"><p class="muted">Your inventory is empty. Defeat an enemy to find loot.</p></div>
-        <div class="section-heading"><div><div class="eyebrow">TRADE POST</div><h2>Merchant's Shop</h2></div></div>
-        <p class="muted tiny">Spend earned coins on supplies and equipment. Shop purchases use inventory space.</p>
+      </section>
+
+      <section class="screen" id="shop-screen">
+        <button class="text-btn back-link" data-go="character">← BACK TO HERO</button>
+        <div class="eyebrow">TRADE POST</div><h1>MERCHANT'S<br><span>SHOP.</span></h1>
+        <div class="shop-wallet">YOUR COINS <strong>◈ <span id="shop-coin-count">0</span></strong></div>
+        <p class="muted intro">Browse the merchant's stock. Purchases are added to your inventory and use one slot each.</p>
         <div class="shop-grid" id="shop-grid"></div>
       </section>
 
@@ -154,6 +168,6 @@
       <button class="nav-item" data-screen="progress"><span>▥</span>Progress</button>
     </nav>
   </div>
-  <script src="./app.js?v=9" defer></script>
+  <script src="./app.js?v=10" defer></script>
 </body>
 </html>
