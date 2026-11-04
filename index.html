@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101014">
+  <meta name="description" content="REP RAMPAGE — train, complete quests, and explore Eldoria.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/rep-rampage-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/rep-rampage-icon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <title>REP RAMPAGE</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="REP RAMPAGE home">
+        <span class="brand-mark">⚔</span>
+        <span>REP <b>RAMPAGE</b></span>
+      </a>
+      <div class="top-stats"><span>◈ <strong id="coin-count">0</strong></span><span>LVL <strong id="level-count">1</strong></span></div>
+    </header>
+
+    <main id="main-content">
+      <section class="screen active" id="home-screen">
+        <div class="eyebrow">THE KINGDOM AWAITS</div>
+        <h1>YOUR LEGEND<br><span>STARTS HERE.</span></h1>
+        <p class="muted intro">Every quest is a chance to grow stronger. Progress at your own pace, and let the adventure unfold.</p>
+
+        <article class="hero-card">
+          <div class="hero-art" aria-hidden="true"><div class="moon"></div><div class="castle">♜</div><div class="knight">⚔</div></div>
+          <div class="hero-copy"><span class="tag">CURRENT REGION</span><h2>Forgotten Forest</h2><p>Ancient paths. Hidden dangers. Your journey begins.</p><button class="primary-btn" data-go="battle">ENTER THE FOREST <span>→</span></button></div>
+        </article>
+
+        <div class="section-heading"><div><div class="eyebrow">YOUR ADVENTURE</div><h2>Hunter's Log</h2></div><span class="muted small">TODAY</span></div>
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-icon">✦</span><span class="stat-label">TOTAL XP</span><strong id="xp-count">0</strong></article>
+          <article class="stat-card"><span class="stat-icon">🔥</span><span class="stat-label">STREAK</span><strong id="streak-count">0 days</strong></article>
+          <article class="stat-card"><span class="stat-icon">✓</span><span class="stat-label">QUESTS DONE</span><strong id="quest-count">0</strong></article>
+        </div>
+        <article class="quest-card">
+          <div class="quest-top"><span class="tag gold">DAILY QUEST</span><span class="muted small">OPTIONAL</span></div>
+          <h3>First Steps</h3><p>Complete a comfortable training session and log your progress.</p>
+          <div class="quest-reward">✦ +50 XP <span>◈ +10 COINS</span></div>
+          <button class="secondary-btn" id="quest-button">MARK QUEST COMPLETE</button>
+        </article>
+      </section>
+
+      <section class="screen" id="battle-screen">
+        <div class="eyebrow">ENCOUNTER</div><h1>THE FOREST<br><span>SENTINEL</span></h1>
+        <p class="muted intro">A guardian watches over the old forest gate. Build your character through balanced training. Your progress carries across sessions.</p>
+        <article class="enemy-card"><div class="enemy-symbol">♜</div><div><span class="tag">REGION BOSS</span><h2>Forest Sentinel</h2><p class="muted small">A first challenge awaits.</p></div><div class="enemy-level">LVL 1</div></article>
+        <div class="progress-label"><span>ENCOUNTER PROGRESS</span><strong id="battle-progress-label">0 / 100 XP</strong></div><div class="progress-track"><span id="battle-progress"></span></div>
+        <div class="panel"><h3>How battles work</h3><p class="muted">Complete appropriate training sessions to earn XP and advance your adventure. You never need to finish an encounter in one workout. Rest and recovery are part of the journey.</p><button class="primary-btn" data-go="training">GO TO TRAINING →</button></div>
+      </section>
+
+      <section class="screen" id="training-screen">
+        <div class="eyebrow">TRAINING GROUNDS</div><h1>TRAIN WITH<br><span>INTENTION.</span></h1>
+        <p class="muted intro">Choose a comfortable session. Quality, control, and recovery come before chasing numbers.</p>
+        <article class="panel training-panel"><div class="panel-heading"><div><span class="tag">STARTER SESSION</span><h2>Push-up Practice</h2></div><span class="difficulty">BEGINNER</span></div>
+          <p class="muted">Use a variation you can perform with steady form. Stop if you feel pain, dizziness, or unusual discomfort.</p>
+          <label for="rep-input">Reps completed</label><div class="rep-entry"><button class="step-btn" id="minus-reps" aria-label="Decrease reps">−</button><input id="rep-input" type="number" min="0" max="100" value="5" inputmode="numeric"><button class="step-btn" id="plus-reps" aria-label="Increase reps">+</button></div>
+          <p class="muted tiny">This is a manual log for the prototype. Camera-based rep detection is not connected yet.</p>
+          <button class="primary-btn full" id="log-workout">LOG SESSION</button>
+          <div class="notice" id="training-message" role="status" aria-live="polite"></div>
+        </article>
+        <div class="section-heading"><div><div class="eyebrow">YOUR RECORD</div><h2>Training history</h2></div></div>
+        <div id="history-list" class="history-list"><p class="muted">Your completed sessions will appear here.</p></div>
+      </section>
+
+      <section class="screen" id="character-screen">
+        <div class="eyebrow">HERO PROFILE</div><h1>YOUR<br><span>CHARACTER.</span></h1>
+        <article class="character-card"><div class="avatar">⚔</div><span class="tag">ELDORIA ADVENTURER</span><h2>Forest Recruit</h2><p class="muted">A new legend in the making.</p><div class="xp-line"><span>LEVEL <b id="profile-level">1</b></span><span id="profile-xp">0 / 100 XP</span></div><div class="progress-track"><span id="profile-progress"></span></div></article>
+        <div class="section-heading"><div><div class="eyebrow">EQUIPMENT</div><h2>Armoury</h2></div></div>
+        <div class="equipment-grid"><div>🪖<span>Helmet</span><b>Empty</b></div><div>🛡<span>Chestplate</span><b>Wanderer's Tunic</b></div><div>⚔<span>Main hand</span><b>Training Sword</b></div><div>🥾<span>Boots</span><b>Empty</b></div></div>
+      </section>
+
+      <section class="screen" id="progress-screen">
+        <div class="eyebrow">THE LONG GAME</div><h1>YOUR<br><span>PROGRESS.</span></h1>
+        <div class="stat-grid"><article class="stat-card"><span class="stat-label">TOTAL XP</span><strong id="progress-xp">0</strong></article><article class="stat-card"><span class="stat-label">SESSIONS</span><strong id="progress-sessions">0</strong></article></div>
+        <article class="panel"><h2>Consistency beats extremes.</h2><p class="muted">Your adventure is designed around steady practice, sensible training, and recovery. Scheduled rest days do not erase your progress.</p></article>
+        <article class="panel privacy-panel"><h3>Privacy & camera</h3><p class="muted">Camera features are not active in this version. When added, camera access will require your permission and workout video will not be uploaded by default.</p></article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item selected" data-screen="home"><span>⌂</span>Home</button>
+      <button class="nav-item" data-screen="battle"><span>⚔</span>Battle</button>
+      <button class="nav-item" data-screen="training"><span>✦</span>Training</button>
+      <button class="nav-item" data-screen="character"><span>♙</span>Hero</button>
+      <button class="nav-item" data-screen="progress"><span>▥</span>Progress</button>
+    </nav>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
