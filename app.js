@@ -79,6 +79,13 @@ function renderStats() {
   setBar("hero-hp-bar", save.heroHp, 100);
   setText("battle-wins", save.wins);
   setText("battle-coins", save.coins);
+  const region = REGIONS[currentRegionIndex()];
+  setText("home-region-name", region.name);
+  setText("home-region-description", region.description);
+  setText("world-wins", save.wins);
+  setText("world-unlocked", unlockedRegionCount() + " / " + REGIONS.length);
+  renderWorld();
+  renderAchievements();
   renderHistory();
   renderQuest();
 }
