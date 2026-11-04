@@ -1,4 +1,4 @@
-const CACHE_NAME = "rep-rampage-shell-v1";
+const CACHE_NAME = "rep-rampage-shell-v2";
 const APP_FILES = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./assets/rep-rampage-icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
