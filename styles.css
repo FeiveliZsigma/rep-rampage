@@ -109,3 +109,20 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .sell-item-btn,.buy-item-btn{flex:none;padding:9px 10px;border:1px solid #d8aa6255;border-radius:5px;background:#d8aa6215;color:var(--gold);font-size:8px;font-weight:900;letter-spacing:.6px;cursor:pointer}
 .buy-item-btn:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:360px){.loot-actions{grid-template-columns:1fr}.inventory-item{gap:7px}.sell-item-btn,.buy-item-btn{padding:8px 7px}}
+
+
+/* Separate Hero destinations for Inventory and Shop */
+.hero-destination-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
+.hero-destination-card{display:grid;justify-items:start;gap:8px;text-align:left;padding:17px 14px;min-height:132px;background:linear-gradient(145deg,#29252a,#17171d);border:1px solid #d8aa6244;border-radius:11px;color:var(--text);cursor:pointer}
+.hero-destination-card>span{font-size:28px;filter:drop-shadow(0 0 8px #d8aa6266)}
+.hero-destination-card strong{font:700 11px Cinzel,Georgia,serif;letter-spacing:.7px;color:var(--gold)}
+.hero-destination-card small{font-size:10px;line-height:1.4;color:var(--muted)}
+.back-link{padding:0 0 17px}
+.inventory-capacity-panel{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px;margin:4px 0 15px;background:#211f25;border:1px solid var(--line);border-radius:10px}
+.inventory-capacity-panel>div{display:grid;gap:5px;flex:none}
+.inventory-capacity-panel strong{font:700 15px Cinzel,Georgia,serif;color:var(--gold)}
+.inventory-capacity-panel span{font-size:8px;letter-spacing:1.3px;color:var(--muted)}
+.inventory-capacity-panel p{font-size:10px;line-height:1.45;color:var(--muted);margin:0}
+.shop-wallet{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;margin:10px 0 17px;border:1px solid #d8aa6255;border-radius:9px;background:#d8aa6212;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:1.2px}
+.shop-wallet strong{font:700 17px Cinzel,Georgia,serif;color:var(--gold)}
+@media(max-width:360px){.hero-destination-card{padding:13px 10px}.inventory-capacity-panel{align-items:flex-start;flex-direction:column}}
