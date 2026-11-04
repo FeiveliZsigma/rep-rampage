@@ -19,8 +19,10 @@ function loadSave() {
     if (!Array.isArray(merged.sessions)) merged.sessions = [];
     if (!Array.isArray(merged.activeDays)) merged.activeDays = [];
     const enemy = ENEMIES[merged.enemyIndex % ENEMIES.length];
-    merged.enemyHp = Math.max(0, Math.min(enemy.maxHp, Number(merged.enemyHp) || enemy.maxHp));
-    merged.heroHp = Math.max(0, Math.min(100, Number(merged.heroHp) || 100));
+    const savedEnemyHp = Number(merged.enemyHp);
+    const savedHeroHp = Number(merged.heroHp);
+    merged.enemyHp = Math.max(0, Math.min(enemy.maxHp, Number.isFinite(savedEnemyHp) ? savedEnemyHp : enemy.maxHp));
+    merged.heroHp = Math.max(0, Math.min(100, Number.isFinite(savedHeroHp) ? savedHeroHp : 100));
     return merged;
   } catch {
     return { ...defaultSave };
@@ -163,12 +165,15 @@ document.getElementById("log-workout").addEventListener("click", () => {
 
   const priorDay = new Date(today + "T12:00:00");
   priorDay.setDate(priorDay.getDate() - 1);
-  if (save.heroHp === 0 || save.lastTrainingDate !== localDateKey()) save.heroHp = 100;
-  else if (save.heroHp < 100 && save.sessions.length > 1 && save.sessions[1].date !== new Date().toLocaleDateString()) {
-    save.heroHp = Math.min(100, save.heroHp + 20);
-  }
   persist();
   repInput.value = 5;
+});
+
+document.getElementById("rest-button").addEventListener("click", () => {
+  save.heroHp = 100;
+  persist();
+  setText("battle-log", "Your hero has recovered fully. Take your time between real training sessions.");
+  setText("rest-message", "Hero vitality restored to 100. No XP or coins were spent.");
 });
 
 document.getElementById("quest-button").addEventListener("click", () => {
